@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{2d181b4a-5e98-4c6f-b40c-e94921ae06ac}</ProjectGuid>
+    <RootNamespace>externalcheatbase</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '18.0'">v145</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '17.0'">v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '18.0'">v145</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '17.0'">v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)external-cheat-base\vendor\SDL2\include;$(SolutionDir)external-cheat-base\vendor\imgui;$(SolutionDir)external-cheat-base\src;$(SolutionDir)external-cheat-base\src\core;$(SolutionDir)external-cheat-base\src\features;$(SolutionDir)external-cheat-base\src\utils;$(SolutionDir)external-cheat-base\generated</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)external-cheat-base\vendor\SDL2\lib\x64</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)external-cheat-base\vendor\SDL2\include;$(SolutionDir)external-cheat-base\vendor\imgui;$(SolutionDir)external-cheat-base\src;$(SolutionDir)external-cheat-base\src\core;$(SolutionDir)external-cheat-base\src\features;$(SolutionDir)external-cheat-base\src\utils;$(SolutionDir)external-cheat-base\generated</IncludePath>
+    <LibraryPath>$(WindowsSDK_LibraryPath_x64);$(VC_LibraryPath_x64);$(SolutionDir)external-cheat-base\vendor\SDL2\lib\x64</LibraryPath>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;Shell32.lib;Ole32.lib;Windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;Shell32.lib;Ole32.lib;Windowscodecs.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="generated\buttons.hpp" />
+    <ClInclude Include="generated\client_dll.hpp" />
+    <ClInclude Include="generated\offsets.hpp" />
+    <ClInclude Include="src\core\diagnostics.hpp" />
+    <ClInclude Include="src\core\game\fixed_map_catalog.hpp" />
+    <ClInclude Include="src\core\game\fixed_map_radar.hpp" />
+    <ClInclude Include="src\core\game\game_snapshot.hpp" />
+    <ClInclude Include="src\core\game\radar_player_sample.hpp" />
+    <ClInclude Include="src\core\memory\game_layout.hpp" />
+    <ClInclude Include="src\core\memory\memory.hpp" />
+    <ClInclude Include="src\core\performance_metrics.hpp" />
+    <ClInclude Include="src\core\renderer\sdl_renderer.h" />
+    <ClInclude Include="src\core\renderer\viewport_math.hpp" />
+    <ClInclude Include="src\core\runtime_timing.hpp" />
+    <ClInclude Include="src\features\esp.hpp" />
+    <ClInclude Include="src\features\local_radar\local_fixed_radar.hpp" />
+    <ClInclude Include="src\features\menu.hpp" />
+    <ClInclude Include="src\utils\math\vector.hpp" />
+    <ClInclude Include="vendor\imgui\imconfig.h" />
+    <ClInclude Include="vendor\imgui\imgui.h" />
+    <ClInclude Include="vendor\imgui\imgui_internal.h" />
+    <ClInclude Include="vendor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="vendor\imgui\imstb_textedit.h" />
+    <ClInclude Include="vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="vendor\imgui\imgui_impl_sdl2.h" />
+    <ClInclude Include="vendor\imgui\imgui_impl_sdlrenderer2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\features\esp.cpp" />
+    <ClCompile Include="src\features\local_radar\local_fixed_radar.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\core\memory\memory.cpp" />
+    <ClCompile Include="src\core\renderer\sdl_renderer.cpp" />
+    <ClCompile Include="vendor\imgui\imgui.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_tables.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_impl_sdl2.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_impl_sdlrenderer2.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\app.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\cs2.ico" />
+    <None Include="resources\app.manifest" />
+    <None Include="resources\NOTICE.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Target Name="CopyRuntimeAssets" AfterTargets="Build">
+    <ItemGroup>
+      <!-- Local Radar consumes only the authoritative map assets. Copying
+           directly from public/maps removes the Vite/Web build dependency. -->
+      <LocalRadarMapAsset Include="$(SolutionDir)web-radar\public\maps\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="$(SolutionDir)external-cheat-base\vendor\SDL2\lib\x64\SDL2.dll"
+          DestinationFiles="$(TargetDir)SDL2.dll"
+          SkipUnchangedFiles="true" />
+    <!-- Remove artifacts left by builds made before the browser backend was
+         retired, then stage only the native Local Radar resources. -->
+    <Delete Files="$(TargetDir)CIVETWEB-LICENSE.md"
+            Condition="Exists('$(TargetDir)CIVETWEB-LICENSE.md')" />
+    <RemoveDir Directories="$(TargetDir)web-radar;$(TargetDir)local-radar" />
+    <Copy SourceFiles="@(LocalRadarMapAsset)"
+          DestinationFolder="$(TargetDir)local-radar\maps\%(RecursiveDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

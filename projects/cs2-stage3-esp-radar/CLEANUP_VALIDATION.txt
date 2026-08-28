@@ -1,0 +1,3 @@
+Removed-feature identifier scan:
+PASS — no Aimbot/Triggerbot identifiers remain in the C/C++ source/project files.
+PASS — no Bomb Timer or Web Radar backend identifiers remain in the native C++ source/project files.

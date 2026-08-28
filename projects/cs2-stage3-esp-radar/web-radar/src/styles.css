@@ -1,0 +1,1570 @@
+/* ===== 全局主题与基础交互 ===== */
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  color: var(--text);
+  background: #07090b;
+  --text: #e9edf0;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --focus-color: #9fe7bd;
+  --line: rgba(210, 225, 235, 0.11);
+  --muted: #7d8993;
+  --ct: #56c7f2;
+  --t: #f1b95b;
+  --danger: #ff5c5c;
+  --success: #67d89b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 320px;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(70, 91, 107, 0.18), transparent 42%),
+    #07090b;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+/* 多个区域共享的布局原语集中声明，组件规则只保留自身差异。 */
+.brand-block,
+.access-brand,
+.match-meta,
+.header-actions,
+.team-panel > header,
+.team-panel > header div,
+.player-card-topline,
+.vitals-row,
+.kit-row,
+.radar-topbar,
+.radar-topbar > div,
+.bomb-timer,
+.toggle-setting,
+.app-footer {
+  display: flex;
+  align-items: center;
+}
+
+.access-shell,
+.brand-mark,
+.access-symbol,
+.connection-notice-mark,
+.team-panel > header div > span,
+.death-mark,
+.floor-mark,
+.map-bomb,
+.site-badge,
+.settings-heading button {
+  display: grid;
+  place-items: center;
+}
+
+.access-message,
+.map-placeholder,
+.stale-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.deployment-label,
+.map-name,
+.player-name,
+.kit-row strong,
+.equipment-row span,
+.radar-topbar strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== 应用框架与顶部状态栏 ===== */
+.app-shell {
+  --popover-top: 70px;
+  position: relative;
+  display: grid;
+  grid-template-rows: 62px minmax(0, 1fr) 34px;
+  width: 100%;
+  height: 100dvh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  isolation: isolate;
+}
+
+.status-header {
+  z-index: 10;
+  display: grid;
+  grid-template-columns: minmax(210px, 1fr) auto minmax(210px, 1fr);
+  align-items: center;
+  gap: 18px;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(8, 11, 14, 0.9);
+  backdrop-filter: blur(16px);
+}
+
+.brand-block {
+  gap: 11px;
+  min-width: 0;
+}
+
+.brand-mark {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 7px;
+  background: #11171c;
+  transform: rotate(45deg);
+}
+
+.brand-mark i {
+  position: absolute;
+  width: 12px;
+  height: 1px;
+  background: #d8e2e8;
+}
+
+.brand-mark i:nth-child(2) {
+  transform: rotate(90deg);
+}
+
+.brand-mark i:nth-child(3) {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+.brand-block > div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.brand-block strong {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+
+.brand-block span:last-child {
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.match-meta {
+  gap: 10px;
+}
+
+.connection-pill,
+.map-name,
+.sequence {
+  white-space: nowrap;
+}
+
+.connection-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: #aab4bc;
+  background: rgba(255, 255, 255, 0.025);
+  font-size: 11px;
+}
+
+.connection-pill i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--t);
+  box-shadow: 0 0 9px currentColor;
+}
+
+.connection-pill.is-live {
+  color: #b9f1d1;
+  border-color: rgba(103, 216, 155, 0.2);
+  background: rgba(103, 216, 155, 0.07);
+}
+
+.connection-pill.is-live i {
+  background: var(--success);
+}
+
+.map-name {
+  max-width: 200px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.sequence {
+  color: #56616a;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.header-actions {
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.deployment-label {
+  max-width: 150px;
+  padding: 4px 6px;
+  border: 1px solid rgba(103, 216, 155, 0.14);
+  border-radius: 4px;
+  color: #7fae92;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.05em;
+}
+
+.compact-error {
+  color: #ff9b9b;
+  font-size: 11px;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #11161b;
+  color: #a9b2b9;
+  cursor: pointer;
+}
+
+.icon-button:hover,
+.icon-button.is-active {
+  border-color: rgba(255, 255, 255, 0.22);
+  color: white;
+  background: #192028;
+}
+
+.icon-button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.logout-button {
+  color: #d4a3a3;
+}
+
+/* ===== Relay 访问与认证页面 ===== */
+.access-shell {
+  position: fixed;
+  inset: 0;
+  min-width: 320px;
+  padding: 24px;
+  overflow: auto;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    radial-gradient(circle at 50% 15%, rgba(70, 112, 132, 0.2), transparent 40%),
+    #07090b;
+  background-size: 32px 32px, 32px 32px, auto, auto;
+}
+
+.access-card {
+  width: min(430px, 100%);
+  overflow: hidden;
+  border: 1px solid rgba(215, 230, 238, 0.14);
+  border-radius: 12px;
+  background: rgba(13, 18, 22, 0.96);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(18px);
+}
+
+.access-brand {
+  gap: 12px;
+  padding: 19px 22px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.access-brand > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.access-brand h1 {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+
+.access-brand > div > span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.relay-login,
+.access-message {
+  padding: 26px 24px 24px;
+}
+
+.login-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 22px;
+}
+
+.login-heading > div {
+  min-width: 0;
+}
+
+.login-heading strong,
+.access-message strong {
+  display: block;
+  color: #e5ebef;
+  font-size: 15px;
+}
+
+.login-heading p,
+.access-message p {
+  margin: 5px 0 0;
+  color: #7f8b94;
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.access-symbol {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 120, 120, 0.2);
+  border-radius: 7px;
+  color: #ff9b9b;
+  background: rgba(255, 92, 92, 0.07);
+  font-size: 13px;
+}
+
+.access-symbol.is-secure {
+  color: var(--success);
+  border-color: rgba(103, 216, 155, 0.2);
+  background: rgba(103, 216, 155, 0.07);
+  font-size: 10px;
+}
+
+.relay-login label {
+  display: block;
+  margin-top: 14px;
+}
+
+.relay-login label > span {
+  display: block;
+  margin-bottom: 6px;
+  color: #aeb8bf;
+  font-size: 10px;
+}
+
+.relay-login input {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 7px;
+  outline: none;
+  color: #eef2f4;
+  background: #0a0e11;
+  font-size: 12px;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.relay-login input:focus {
+  border-color: rgba(103, 216, 155, 0.5);
+  box-shadow: 0 0 0 3px rgba(103, 216, 155, 0.08);
+}
+
+.relay-login input::placeholder {
+  color: #49535b;
+}
+
+.login-error {
+  margin: 12px 0 0;
+  color: #ff9b9b;
+  font-size: 10px;
+}
+
+.primary-button {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 18px;
+  padding: 10px 14px;
+  border: 1px solid rgba(103, 216, 155, 0.3);
+  border-radius: 7px;
+  color: #d7f6e4;
+  background: rgba(103, 216, 155, 0.13);
+  font-weight: 700;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.primary-button:hover:not(:disabled) {
+  border-color: rgba(103, 216, 155, 0.5);
+  background: rgba(103, 216, 155, 0.2);
+}
+
+.primary-button:disabled {
+  opacity: 0.45;
+  cursor: wait;
+}
+
+.access-message {
+  min-height: 220px;
+  text-align: center;
+}
+
+.access-message .access-symbol,
+.access-spinner {
+  margin-bottom: 14px;
+}
+
+.access-message .primary-button {
+  width: auto;
+  min-width: 120px;
+}
+
+.access-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--success);
+  border-radius: 50%;
+  animation: access-spin 800ms linear infinite;
+}
+
+@keyframes access-spin {
+  to { transform: rotate(360deg); }
+}
+
+.access-card > footer {
+  padding: 10px 14px;
+  border-top: 1px solid var(--line);
+  color: #56616a;
+  background: rgba(0, 0, 0, 0.14);
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* ===== 实时连接异常提示 ===== */
+.connection-notice {
+  position: absolute;
+  z-index: 50;
+  top: var(--popover-top);
+  left: 50%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  width: min(620px, calc(100% - 28px));
+  gap: 11px;
+  padding: 10px 11px;
+  border: 1px solid rgba(241, 185, 91, 0.3);
+  border-radius: 9px;
+  background: rgba(25, 21, 15, 0.96);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.42);
+  transform: translateX(-50%);
+  backdrop-filter: blur(14px);
+}
+
+.connection-notice-mark {
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(241, 185, 91, 0.28);
+  border-radius: 6px;
+  color: #ffd992;
+  background: rgba(241, 185, 91, 0.08);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.connection-notice > div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.connection-notice strong {
+  color: #f3e3c3;
+  font-size: 11px;
+}
+
+.connection-notice div > span,
+.connection-notice small {
+  margin-top: 2px;
+  color: #b6aa94;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.connection-notice small {
+  color: #817866;
+}
+
+.connection-notice button,
+.map-placeholder button {
+  min-height: 40px;
+  padding: 7px 11px;
+  border: 1px solid rgba(241, 185, 91, 0.35);
+  border-radius: 6px;
+  color: #f7dca6;
+  background: rgba(241, 185, 91, 0.1);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.connection-notice button:hover,
+.map-placeholder button:hover {
+  border-color: rgba(241, 185, 91, 0.58);
+  background: rgba(241, 185, 91, 0.18);
+}
+
+/* ===== 队伍面板与玩家卡片 ===== */
+.radar-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 270px) minmax(360px, 1fr) minmax(220px, 270px);
+  min-height: 0;
+}
+
+.team-panel {
+  --team-header-height: 50px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-right: 1px solid var(--line);
+  background: rgba(12, 16, 20, 0.68);
+}
+
+.team-panel:last-child {
+  border-right: 0;
+  border-left: 1px solid var(--line);
+}
+
+.team-panel > header {
+  justify-content: space-between;
+  height: var(--team-header-height);
+  padding: 0 13px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.016);
+}
+
+.team-panel > header div {
+  gap: 9px;
+}
+
+.team-panel > header div > span {
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.team-ct > header div > span {
+  color: #d3f4ff;
+  background: rgba(86, 199, 242, 0.17);
+}
+
+.team-t > header div > span {
+  color: #fff0cf;
+  background: rgba(241, 185, 91, 0.17);
+}
+
+.team-panel > header strong {
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.team-panel > header output {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.player-list {
+  height: calc(100% - var(--team-header-height));
+  padding: 8px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-color: #27313a transparent;
+  scrollbar-width: thin;
+}
+
+.panel-empty {
+  margin: 32px 8px;
+  color: #59636c;
+  font-size: 11px;
+  text-align: center;
+}
+
+.player-card {
+  position: relative;
+  margin-bottom: 7px;
+  padding: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012));
+}
+
+.player-card::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 2px;
+  content: "";
+  background: var(--ct);
+}
+
+.team-t .player-card::before {
+  background: var(--t);
+}
+
+.player-card.is-local {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.player-card.is-dead {
+  opacity: 0.48;
+  filter: saturate(0.35);
+}
+
+.player-card-topline {
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.player-name {
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 680;
+}
+
+.local-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin: 0 6px 1px 0;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 5px var(--success);
+}
+
+.player-money {
+  color: #9bb89e;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.vitals-row {
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.health-stat {
+  width: 20px;
+  color: #d9e1e6;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.health-track {
+  height: 3px;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.health-track i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--success);
+}
+
+.armor-stat {
+  color: #7faec2;
+  font-size: 9px;
+}
+
+.kit-row {
+  min-height: 18px;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.kit-row > span {
+  padding: 2px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  color: #a8b3bb;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.kit-row .bomb-chip {
+  color: #ffd9d9;
+  border-color: rgba(255, 92, 92, 0.3);
+  background: rgba(255, 92, 92, 0.09);
+}
+
+.kit-row .dead-chip {
+  border-color: transparent;
+  color: #8f969b;
+}
+
+.kit-row strong {
+  min-width: 0;
+  margin-left: auto;
+  color: #bec8ce;
+  font-size: 8px;
+  font-weight: 650;
+}
+
+.equipment-row {
+  display: flex;
+  gap: 3px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.equipment-row span {
+  min-width: 0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  color: #5f6a72;
+  background: rgba(255, 255, 255, 0.025);
+  font-size: 7px;
+}
+
+.equipment-row span.is-active {
+  color: #d2d9dd;
+  background: rgba(255, 255, 255, 0.075);
+}
+
+/* ===== Radar 画布与固定北向地图 ===== */
+.radar-shell {
+  /* 146px = 顶栏、底栏、地图标题和工作区留白的总占用高度。 */
+  --radar-width: min(100%, calc(100dvh - 146px));
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.radar-topbar,
+.radar-frame {
+  width: var(--radar-width);
+  min-width: 0;
+}
+
+.radar-topbar {
+  justify-content: space-between;
+  min-height: 35px;
+  gap: 8px;
+  padding: 0 2px;
+}
+
+.radar-topbar > div {
+  min-width: 0;
+  gap: 8px;
+}
+
+.north-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #8c989f;
+  font-family: var(--font-mono);
+  font-size: 9px;
+}
+
+.north-indicator i {
+  width: 0;
+  height: 0;
+  border-right: 4px solid transparent;
+  border-bottom: 7px solid #d7dfe3;
+  border-left: 4px solid transparent;
+}
+
+.radar-topbar strong {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.radar-topbar small {
+  color: #63707a;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.radar-topbar small.floor-confidence-low {
+  color: var(--t);
+}
+
+.bomb-status {
+  padding: 4px 7px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: #7f8b94;
+  font-size: 9px;
+}
+
+.bomb-status.bomb-planted,
+.bomb-status.bomb-dropped {
+  color: #ffb1b1;
+  border-color: rgba(255, 92, 92, 0.25);
+  background: rgba(255, 92, 92, 0.07);
+}
+
+.radar-frame {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: visible;
+  border: 1px solid rgba(226, 238, 246, 0.16);
+  background: #10151a;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.32);
+}
+
+.radar-frame::before,
+.radar-frame::after {
+  position: absolute;
+  z-index: 4;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  content: "";
+}
+
+.radar-frame::before {
+  top: -3px;
+  left: -3px;
+  border-top: 2px solid rgba(255, 255, 255, 0.5);
+  border-left: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.radar-frame::after {
+  right: -3px;
+  bottom: -3px;
+  border-right: 2px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.radar-surface {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: #11171b;
+  background-image:
+    linear-gradient(rgba(155, 174, 186, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(155, 174, 186, 0.06) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, rgba(121, 141, 154, 0.12), transparent 66%);
+  background-size: 32px 32px, 32px 32px, auto;
+}
+
+.radar-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  user-select: none;
+}
+
+/* 玩家、航向、楼层与 C4 标记使用独立层级，避免互相遮挡。 */
+.map-player {
+  position: absolute;
+  z-index: 7;
+  width: var(--player-size);
+  height: var(--player-size);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: left 60ms linear, top 60ms linear, opacity 150ms ease;
+  will-change: left, top;
+}
+
+.direction-arrow {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border: 2px solid #101417;
+  border-radius: 50%;
+  background: var(--player-accent);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.76), 0 2px 8px rgba(0, 0, 0, 0.75);
+  transform: rotate(var(--heading));
+  transition: transform 60ms linear;
+}
+
+.direction-arrow::after {
+  position: absolute;
+  top: 50%;
+  right: -34%;
+  width: 0;
+  height: 0;
+  border-top: calc(var(--player-size) * 0.19) solid transparent;
+  border-bottom: calc(var(--player-size) * 0.19) solid transparent;
+  border-left: calc(var(--player-size) * 0.38) solid var(--player-accent);
+  content: "";
+  filter: drop-shadow(1px 0 0 #101417);
+  transform: translateY(-50%);
+}
+
+.direction-arrow.has-no-heading::after {
+  display: none;
+}
+
+.map-player.is-local .direction-arrow {
+  box-shadow: 0 0 0 2px #fff, 0 0 12px rgba(255, 255, 255, 0.58);
+}
+
+.map-player.is-dormant {
+  opacity: 0.45;
+}
+
+.death-mark {
+  position: absolute;
+  inset: 0;
+  color: #adb5ba;
+  font-family: var(--font-mono);
+  font-size: calc(var(--player-size) * 1.25);
+  font-style: normal;
+  font-weight: 300;
+  line-height: 1;
+  text-shadow: 0 1px 4px #000;
+}
+
+.map-player > span {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  max-width: 96px;
+  padding: 2px 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  color: #f4f6f7;
+  background: rgba(5, 7, 9, 0.72);
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px #000;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+
+.carrier-mark {
+  position: absolute;
+  right: -8px;
+  bottom: -6px;
+  z-index: 2;
+  padding: 1px 2px;
+  border-radius: 2px;
+  color: white;
+  background: #cf4444;
+  font-size: 6px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.floor-mark {
+  position: absolute;
+  top: -9px;
+  left: -8px;
+  z-index: 3;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  color: #f5f7f8;
+  background: rgba(8, 11, 14, 0.88);
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 900;
+  box-shadow: 0 1px 4px #000;
+}
+
+.floor-mark.is-upper {
+  color: #a8e1ff;
+}
+
+.floor-mark.is-lower {
+  color: #d3b6ff;
+}
+
+.map-bomb {
+  position: absolute;
+  z-index: 9;
+  width: var(--bomb-size);
+  height: var(--bomb-size);
+  border: 2px solid #ffd0d0;
+  border-radius: 5px;
+  color: white;
+  background: #cb4141;
+  box-shadow: 0 0 0 3px rgba(203, 65, 65, 0.2), 0 4px 12px rgba(0, 0, 0, 0.65);
+  font-family: var(--font-mono);
+  font-size: calc(var(--bomb-size) * 0.3);
+  font-weight: 900;
+  transform: translate(-50%, -50%);
+}
+
+.map-bomb.bomb-carried {
+  opacity: 0.72;
+  transform: translate(-50%, -50%) scale(0.72);
+}
+
+.map-bomb.bomb-planted {
+  animation: bomb-pulse 1s ease-in-out infinite;
+}
+
+@keyframes bomb-pulse {
+  50% {
+    box-shadow: 0 0 0 8px rgba(203, 65, 65, 0.03), 0 4px 18px rgba(255, 70, 70, 0.6);
+  }
+}
+
+/* 地图缺失、资源失败和数据暂停的覆盖状态。 */
+.map-placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 22;
+  padding: 30px;
+  color: #7e8b94;
+  text-align: center;
+}
+
+.map-placeholder > span {
+  margin-bottom: 12px;
+  color: #53616b;
+  font-size: 42px;
+  line-height: 1;
+}
+
+.map-placeholder strong {
+  color: #bbc4ca;
+  font-size: 13px;
+}
+
+.map-placeholder p {
+  max-width: 80%;
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+  font-size: 10px;
+}
+
+.map-placeholder button {
+  margin-top: 14px;
+}
+
+.image-missing {
+  background: rgba(12, 17, 21, 0.84);
+}
+
+.stale-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: rgba(8, 11, 13, 0.55);
+  backdrop-filter: grayscale(1) blur(1px);
+  pointer-events: none;
+}
+
+.stale-overlay strong {
+  font-size: 14px;
+}
+
+.stale-overlay span {
+  margin-top: 4px;
+  color: #909ba3;
+  font-size: 10px;
+}
+
+.bomb-timer {
+  position: absolute;
+  z-index: 30;
+  top: 10px;
+  left: 50%;
+  gap: 12px;
+  min-width: 178px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 97, 97, 0.36);
+  border-radius: 7px;
+  background: rgba(15, 12, 13, 0.9);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  transform: translateX(-50%);
+  backdrop-filter: blur(9px);
+}
+
+.site-badge {
+  width: 29px;
+  height: 29px;
+  border-radius: 5px;
+  color: #fff;
+  background: #c94848;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.bomb-timer > div {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: baseline;
+  column-gap: 7px;
+}
+
+.bomb-timer small {
+  grid-column: 1 / -1;
+  color: #8e979d;
+  font-size: 8px;
+}
+
+.bomb-timer strong {
+  color: #ff7676;
+  font-family: var(--font-mono);
+  font-size: 17px;
+}
+
+.bomb-timer > div + div {
+  padding-left: 11px;
+  border-left: 1px solid var(--line);
+}
+
+.bomb-timer > div + div strong {
+  font-size: 13px;
+}
+
+.bomb-timer > div + div span {
+  font-size: 8px;
+}
+
+.defuse-safe strong,
+.defuse-safe span {
+  color: var(--success) !important;
+}
+
+.defuse-danger strong,
+.defuse-danger span {
+  color: var(--danger) !important;
+}
+
+/* ===== 显示设置与本地回放控制 ===== */
+.settings-panel {
+  position: absolute;
+  z-index: 100;
+  top: var(--popover-top);
+  right: 12px;
+  width: min(310px, calc(100vw - 24px));
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  background: rgba(15, 20, 25, 0.96);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(18px);
+}
+
+.settings-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.settings-heading div {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-heading strong {
+  font-size: 13px;
+}
+
+.settings-heading span {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.settings-heading button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  color: #8e999f;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.replay-setting {
+  display: grid;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.replay-file-button,
+.replay-actions button {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #151c22;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.replay-file-button input {
+  display: none;
+}
+
+.replay-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.settings-error {
+  color: var(--danger);
+}
+
+.range-setting {
+  display: block;
+  margin-top: 15px;
+}
+
+.range-setting > span {
+  display: flex;
+  justify-content: space-between;
+  color: #c3cbd0;
+  font-size: 11px;
+}
+
+.range-setting output {
+  color: var(--muted);
+  font-family: var(--font-mono);
+}
+
+.range-setting input {
+  width: 100%;
+  margin: 10px 0 0;
+  accent-color: #d5dee3;
+}
+
+.toggle-setting {
+  position: relative;
+  justify-content: space-between;
+  margin-top: 13px;
+  color: #c3cbd0;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.toggle-setting input {
+  position: absolute;
+  opacity: 0;
+}
+
+.toggle-setting i {
+  position: relative;
+  width: 32px;
+  height: 18px;
+  border-radius: 99px;
+  background: #29313a;
+  transition: 150ms ease;
+}
+
+.toggle-setting i::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  content: "";
+  background: #8f999f;
+  transition: 150ms ease;
+}
+
+.toggle-setting input:checked + i {
+  background: rgba(103, 216, 155, 0.3);
+}
+
+.toggle-setting input:checked + i::after {
+  left: 17px;
+  background: var(--success);
+}
+
+.toggle-setting input:focus-visible + i {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 3px;
+}
+
+/* ===== 底部图例与质量指标 ===== */
+.app-footer {
+  gap: 16px;
+  padding: 0 14px;
+  border-top: 1px solid var(--line);
+  color: #6d7880;
+  background: #090c0f;
+  font-size: 9px;
+}
+
+.app-footer > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.footer-spacer {
+  flex: 1;
+}
+
+.legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.legend-dot.ct {
+  background: var(--ct);
+}
+
+.legend-dot.t {
+  background: var(--t);
+}
+
+.legend-cross {
+  color: #aab2b7;
+  font-size: 13px;
+}
+
+/* ===== 响应式布局：规则按覆盖顺序排列，请勿随意重排断点 ===== */
+@media (max-width: 980px) and (orientation: portrait) {
+  body {
+    overflow: auto;
+  }
+
+  .app-shell {
+    height: auto;
+    min-height: 100dvh;
+    grid-template-rows: 58px auto 34px;
+  }
+
+  .status-header {
+    position: sticky;
+    top: 0;
+    grid-template-columns: 1fr auto;
+  }
+
+  .match-meta {
+    display: none;
+  }
+
+  .radar-layout {
+    grid-template-areas:
+      "radar radar"
+      "ct t";
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .radar-shell {
+    --radar-width: min(100%, calc(100vw - 24px));
+    grid-area: radar;
+    min-height: min(100vw, 720px);
+  }
+
+  .team-ct {
+    grid-area: ct;
+  }
+
+  .team-t {
+    grid-area: t;
+  }
+
+  .team-panel,
+  .team-panel:last-child {
+    max-height: 54vh;
+    border-top: 1px solid var(--line);
+  }
+
+}
+
+@media (orientation: landscape) and (max-height: 620px) {
+  .app-shell {
+    --popover-top: 52px;
+    grid-template-rows: 46px minmax(0, 1fr);
+  }
+
+  .status-header {
+    padding: 0 10px;
+  }
+
+  .brand-block span:last-child,
+  .sequence,
+  .compact-error,
+  .app-footer {
+    display: none;
+  }
+
+  .radar-layout {
+    grid-template-columns: minmax(150px, 205px) minmax(310px, 1fr) minmax(150px, 205px);
+  }
+
+  .radar-shell {
+    /* 91px 对应压缩后的顶栏、地图标题与上下留白。 */
+    --radar-width: min(100%, calc(100dvh - 91px));
+    padding: 5px;
+  }
+
+  .radar-topbar {
+    min-height: 28px;
+  }
+
+  .team-panel {
+    --team-header-height: 38px;
+  }
+
+  .player-list {
+    padding: 5px;
+  }
+
+  .player-card {
+    margin-bottom: 4px;
+    padding: 7px;
+  }
+
+  .equipment-row {
+    display: none;
+  }
+
+  .settings-panel {
+    max-height: calc(100dvh - 60px);
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 620px) and (orientation: portrait) {
+  .brand-block strong {
+    font-size: 10px;
+  }
+
+  .icon-button span:last-child {
+    display: none;
+  }
+
+  .deployment-label {
+    display: none;
+  }
+
+  .logout-button {
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+
+  .connection-notice {
+    top: 66px;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .connection-notice button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .radar-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .radar-shell {
+    --radar-width: calc(100vw - 16px);
+    min-height: 100vw;
+    order: -1;
+  }
+
+  .team-panel,
+  .team-panel:last-child {
+    max-height: none;
+    min-height: 260px;
+    border-left: 0;
+    border-right: 0;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .access-shell {
+    padding: 12px;
+  }
+
+  .relay-login,
+  .access-message {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+}
+
+@media (pointer: coarse) {
+  .icon-button,
+  .connection-notice button,
+  .map-placeholder button {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -1,0 +1,169 @@
+﻿#pragma once
+
+#include <optional>
+#include <vector>
+
+#include "core/memory/memory.hpp"
+#include "core/game/game_snapshot.hpp"
+#include "client_dll.hpp"
+#include "offsets.hpp"
+#include "utils/math/vector.hpp"
+#include <string>
+#include <memory>
+
+extern uint32_t WIDTH;
+extern uint32_t HEIGHT;
+extern uint32_t WINDOW_W;
+extern uint32_t WINDOW_H;
+
+struct viewMatrix
+{
+    float m[16];
+};
+
+// CS2 bone indices
+namespace BoneIndex
+{
+    constexpr int PELVIS = 0;
+    constexpr int SPINE_2 = 2;
+    constexpr int NECK = 5;
+    constexpr int HEAD = 6;
+    constexpr int LEFT_SHOULDER = 8;
+    constexpr int LEFT_ELBOW = 9;
+    constexpr int LEFT_HAND = 11;
+    constexpr int RIGHT_SHOULDER = 13;
+    constexpr int RIGHT_ELBOW = 14;
+    constexpr int RIGHT_HAND = 15;
+    constexpr int LEFT_HIP = 17;
+    constexpr int LEFT_KNEE = 18;
+    constexpr int LEFT_FOOT = 19;
+    constexpr int RIGHT_HIP = 20;
+    constexpr int RIGHT_KNEE = 21;
+    constexpr int RIGHT_FOOT = 22;
+    constexpr int BONE_COUNT = 28;
+}
+
+// Bone connection pair
+struct BoneConnection
+{
+    int from;
+    int to;
+};
+
+// Enemy info structure
+struct EnemyInfo
+{
+    uintptr_t pawnAddress = 0;
+    uint32_t entityIndex = 0;
+    vec3 position{};
+    vec3 headPosition{};
+    int32_t health = 0;
+    float distance = 0.0f;
+    std::string weaponName;
+    float viewYaw = 0.0f;
+    float angleToPlayer = 180.0f;
+    float flashDuration = 0.0f;
+    bool viewAngleKnown = false;
+    bool isFlashed = false;
+    bool isSpotted = false;
+    bool visibilityKnown = false;
+    vec3 bonePositions[BoneIndex::BONE_COUNT]{};
+    bool hasBones = false;
+};
+
+// Minimal C4 state used by Local Radar. Countdown-only fields were removed
+// together with the Bomb Timer feature.
+struct BombInfo
+{
+    bool isPlanted = false;
+    bool hasExploded = false;
+    bool isDefused = false;
+    vec3 position{};
+    bool positionKnown = false;
+};
+
+// World entity info (grenades, dropped weapons)
+struct WorldEntityInfo
+{
+    vec3 position;
+    int type; // 0=smoke, 1=flash, 2=HE, 3=molotov, 4=decoy, 5=weapon
+    std::string name;
+    float distance;
+};
+
+// Cached entity pawn address for fast-path updates
+struct CachedPawn
+{
+    uintptr_t controllerAddress = 0;
+    uintptr_t pawnAddress = 0;
+    uint32_t pawnHandle = 0;
+    uint32_t entityIndex = 0;
+    uint8_t team = 0;
+    uint64_t playerId = 0;
+    uint64_t steamId = 0;
+    bool steamIdKnown = false;
+    std::string playerName;
+    int competitiveColor = -1;
+    int armor = 0;
+    int money = 0;
+    bool alive = false;
+    bool isLocal = false;
+    bool hasHelmet = false;
+    bool hasDefuser = false;
+    bool hasBomb = false;
+    std::string weaponName;
+    std::optional<game::WeaponSnapshot> activeWeapon;
+    std::vector<game::WeaponSnapshot> inventory;
+    float flashDuration = 0.0f;
+    bool isFlashed = false;
+};
+
+#include <mutex>
+
+namespace menu
+{
+    struct RuntimeConfig;
+}
+
+namespace esp
+{
+    using EnemySnapshot =
+        std::shared_ptr<const std::vector<EnemyInfo>>;
+    using WorldEntitySnapshot =
+        std::shared_ptr<const std::vector<WorldEntityInfo>>;
+    using GameSnapshot = std::shared_ptr<const game::GameSnapshot>;
+
+    inline EnemySnapshot enemies =
+        std::make_shared<const std::vector<EnemyInfo>>();
+    inline WorldEntitySnapshot worldEntities =
+        std::make_shared<const std::vector<WorldEntityInfo>>();
+    inline GameSnapshot gameSnapshot =
+        std::make_shared<const game::GameSnapshot>();
+    inline viewMatrix vm = {};
+    inline vec3 player_position{};
+    inline float player_yaw = 0.0f;
+    inline uintptr_t pID;
+    inline uintptr_t modBase;
+
+    // Mutex for thread-safe data access between data thread and render thread
+    inline std::mutex dataMutex;
+
+    // Cached pawn addresses (refreshed periodically)
+    inline std::vector<CachedPawn> cachedPawns;
+
+    // Bomb state
+    inline BombInfo bombInfo;
+
+    bool init();
+    void updateEntities(const menu::RuntimeConfig& config);
+    void refreshEntityCache(const menu::RuntimeConfig& config);
+    void render();
+    void clearRuntimeState();
+    EnemySnapshot getEnemySnapshot();
+    GameSnapshot getGameSnapshot();
+    bool w2s(const vec3& world, vec2& screen, float m[16]);
+    double player_distance(const vec3& a, const vec3& b);
+    float normalizeAngle(float angle);
+    float calculateYawToTarget(const vec3& from, const vec3& to);
+    float calculateAngleToPlayer(float enemyYaw, const vec3& enemyPos, const vec3& playerPos);
+}

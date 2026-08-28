@@ -1,0 +1,7 @@
+/build/
+/bin/
+/obj/
+/backup_before_*/
+*.depend
+*.layout
+*.log

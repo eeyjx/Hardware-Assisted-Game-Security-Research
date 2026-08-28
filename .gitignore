@@ -1,0 +1,45 @@
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+**/.vs/
+**/.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build and generated output
+**/build/
+**/build-*/
+**/bin/
+**/obj/
+**/Debug/
+**/Release/
+**/out/
+**/node_modules/
+**/dist/
+*.obj
+*.o
+*.pdb
+*.ilk
+*.iobj
+*.ipdb
+*.tlog
+*.lastbuildstate
+*.log
+
+# Local backups and IDE state
+**/backup_before_*/
+*.depend
+*.layout
+imgui.ini
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.pfx
+*.p12
+*.key
