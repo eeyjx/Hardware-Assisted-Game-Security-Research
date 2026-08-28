@@ -1,21 +1,21 @@
 # Hardware-Assisted Game Security Research
 
-本科毕业设计代码归档，包含三个面向游戏安全、进程内存分析与可视化的研究项目。
+This repository archives the source code for an undergraduate thesis on game security, process-memory analysis, and visualization.
 
 ## Repository layout
 
 | Directory | Description |
 | --- | --- |
-| [`projects/cs2-dumper-cpp-standalone`](projects/cs2-dumper-cpp-standalone/) | 独立的 C++20 Source 2 进程分析与结构导出工具。 |
-| [`projects/pwnie-island-research`](projects/pwnie-island-research/) | 针对 Pwn Adventure 3: Pwnie Island 教学客户端的本地逆向研究框架。 |
-| [`projects/cs2-stage3-esp-radar`](projects/cs2-stage3-esp-radar/) | CS2 Stage 3 ESP 与本地固定地图 Radar 的源码、测试和运行资源。 |
+| [`projects/cs2-dumper-cpp-standalone`](projects/cs2-dumper-cpp-standalone/) | A standalone C++20 tool for analyzing Source 2 processes and exporting runtime structures. |
+| [`projects/pwnie-island-research`](projects/pwnie-island-research/) | A local reverse-engineering research framework for the Pwn Adventure 3: Pwnie Island educational client. |
+| [`projects/cs2-stage3-esp-radar`](projects/cs2-stage3-esp-radar/) | Source code, tests, and runtime assets for the CS2 Stage 3 ESP and fixed-map radar project. |
 
-各子项目的构建方法、目标环境和限制见对应目录中的 README。
+See the README in each project directory for build instructions, target environments, and limitations.
 
 ## Responsible-use notice
 
-本仓库仅用于毕业设计、离线实验、教学研究以及对本人拥有或已获明确授权的软件进行安全分析。请勿将其中的进程内存读取、注入、Hook 或可视化功能用于在线对局、规避反作弊、未授权系统或任何违反软件许可与服务条款的场景。
+This repository is intended only for thesis work, offline experiments, educational research, and security analysis of software that the researcher owns or is explicitly authorized to examine. Do not use its process-memory reading, injection, hooking, or visualization features in online matches, to evade anti-cheat systems, against unauthorized systems, or in violation of software licenses or terms of service.
 
 ## Repository hygiene
 
-仓库只保留源码、测试、文档和必要的运行资源。IDE 缓存、构建目录、日志、备份、`node_modules` 与其他可再生成产物不纳入版本控制。
+The repository contains source code, tests, documentation, and required runtime assets. IDE caches, build directories, logs, backups, `node_modules`, and other reproducible artifacts are excluded from version control.
